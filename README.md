@@ -1,0 +1,2 @@
+# AzureBlobToS3Migration
+このプロジェクトは、Azure Blobストレージからファイルをダウンロードし、Amazon S3にアップロードするためのPythonスクリプトを提供します。
