@@ -1,0 +1,5 @@
+# Azure Blob Storage SDK
+azure-storage-blob
+
+# AWS SDK for Python (Boto3)
+boto3
