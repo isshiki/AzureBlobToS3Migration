@@ -23,7 +23,7 @@ aws_secret_access_key = config['AWS']['SecretAccessKey']
 aws_region = config['AWS']['Region']
 
 # ログ設定
-log_file_path = f'./{s3_bucket_name}_upload_log.txt'
+log_file_path = f'.\\{s3_bucket_name}_upload_log.txt'
 logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 try:
@@ -39,10 +39,10 @@ except Exception as e:
     exit(1)
 
 # ダウンロードされたファイルのディレクトリ
-local_path = f'.\{s3_bucket_name}'
+local_path = f'.\\{s3_bucket_name}'
 
 # リトライ用のファイル
-retry_file_path = f'./{s3_bucket_name}_upload_retry.txt'
+retry_file_path = f'.\\{s3_bucket_name}_upload_retry.txt'
 
 # リトライ用のファイルリストを読み込む
 retry_files = set()
@@ -101,8 +101,7 @@ for root, dirs, files in os.walk(local_path):
 
         except Exception as e:
             logging.error(f'ファイルのアップロード中にエラーが発生しました: {file_path} -> s3://{s3_bucket_name}/{s3_key}, エラー: {e}')
-            with open(retry_file_path, 'a') as retry_file:
-                retry_file.write(f'{file_path}\n')
+            retry_file.add(file_path)
             continue
         
         processed_files += 1

@@ -24,7 +24,7 @@ connect_str = config['Azure']['ConnectionString']
 blob_storage_name = config['Azure']['BlobStorageName']
 
 # ログ設定
-log_file_path = f'./{blob_storage_name}_download_log.txt'
+log_file_path = f'.\\{blob_storage_name}_download_log.txt'
 logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Azure SDKの詳細なログを抑制
@@ -43,7 +43,7 @@ except Exception as e:
     exit(1)
 
 # リトライ用のファイル
-retry_file_path = f'./{blob_storage_name}_download_retry.txt'
+retry_file_path = f'.\\{blob_storage_name}_download_retry.txt'
 
 # リトライ用のBlobリストを読み込む
 retry_blobs = set()
@@ -111,8 +111,7 @@ for container in containers:
 
         except Exception as e:
             logging.error(f"Blob '{blob.name}' のダウンロード中にエラーが発生しました: {e}")
-            with open(retry_file_path, mode='a') as retry_file:
-                retry_file.write(f'{blob.name}\n')
+            retry_blobs.add(blob.name)
             continue
         
         processed_blobs += 1
