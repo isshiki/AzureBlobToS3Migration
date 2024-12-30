@@ -47,9 +47,11 @@ retry_file_path = f'./{blob_storage_name}_download_retry.txt'
 
 # リトライ用のBlobリストを読み込む
 retry_blobs = set()
+retry_mode = False
 if os.path.exists(retry_file_path):
     with open(retry_file_path, 'r') as retry_file:
         retry_blobs = set(line.strip() for line in retry_file)
+    retry_mode = True
 else:
     open(retry_file_path, 'w').close()
 
@@ -83,6 +85,9 @@ for container in containers:
         continue
     
     for blob in blobs:
+        if retry_mode and blob.name not in retry_blobs:
+            continue
+        
         try:
             blob_client = container_client.get_blob_client(blob)
             download_file_path = os.path.join(local_path, container.name, blob.name.replace('/', '\\'))

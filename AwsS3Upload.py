@@ -46,9 +46,11 @@ retry_file_path = f'./{s3_bucket_name}_upload_retry.txt'
 
 # リトライ用のファイルリストを読み込む
 retry_files = set()
+retry_mode = False
 if os.path.exists(retry_file_path):
     with open(retry_file_path, 'r') as retry_file:
         retry_files = set(line.strip() for line in retry_file)
+    retry_mode = True
 else:
     open(retry_file_path, 'w').close()
 
@@ -61,6 +63,9 @@ for root, dirs, files in os.walk(local_path):
         
         file_path = os.path.join(root, file)
         metadata_file_path = file_path + '.metadata'
+        
+        if retry_mode and file_path not in retry_files:
+            continue
         
         # メタデータファイルが存在するか確認
         if not os.path.exists(metadata_file_path):
